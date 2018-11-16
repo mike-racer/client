@@ -9,7 +9,6 @@
         <h4 class="mt-4">FINISH</h4>
     </div>
     </div>
-    <!-- <h3>{{track}}</h3> -->
     <div v-if="startgame">
         <h1 v-if="track[index] === ' '"><strong>TAP SPACE </strong> </h1>
         <h1 v-if="track[index] !== ' '"><strong>TYPE : {{track[index]}}</strong></h1>
@@ -17,17 +16,19 @@
     </div>
     <div v-if="!startgame && gameOn" class="row d-flex justify-content-center">
         <div class="col">
-            <h3>WAITING FOR OTHER PLAYER....</h3>
+            <h3 class="mt-5">WAITING FOR OTHER PLAYER....</h3>
         </div>
     </div>
     <div v-if="loser" class="row d-flex justify-content-center">
         <div class="col">
-            <h3>YOU LOSE</h3>
+            <h3 class="mt-3">YOU LOSE</h3>
+            <a class="btn btn-danger" @click="backToLobby">BACK TO LOBBY</a>
         </div>
     </div>
     <div v-if="winner" class="row d-flex justify-content-center">
         <div class="col">
-            <h3>YOU WIN</h3>
+            <h3 class="mt-3">YOU WIN</h3>
+            <a class="btn btn-danger" @click="backToLobby">BACK TO LOBBY</a>
         </div>
     </div>
     
@@ -48,7 +49,7 @@ export default {
   },
   data (){
     return {
-      track : [' ','@',' ',' ',' ','&2!',' ',' ',' ',' ','(1@',' ',' ','!#!',' ',' ',' ',' ',' ',' ','*1#',' ','z',' ',' ',' ',' ','*',' ','!!!'],
+      track : [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
       arenas : ['https://media.giphy.com/media/Cp9Siser6g0x2/giphy.gif',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
       realtimearenas : [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
       index : 0,
@@ -118,9 +119,66 @@ export default {
             })
             this.loser = true
         }
+    },
+    backToLobby(){
+        localStorage.removeItem('room')
+        localStorage.removeItem('userid')
+        localStorage.removeItem('username')
+        let ref = database.ref('room/' + this.room)
+        ref.set({})
+        this.$router.push('/')
+    },
+    generateObstacle(){
+        function hard() {
+          var text = "";
+          var possible = "!@#$%^&*(){}";
+
+          for(let i = 0; i < 3; i++){
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+          }
+          return text;
+        }
+
+        function medium() {
+          var text = "";
+          var possible = "!@#$%^&*()0123456789";
+
+          for(let i = 0; i < 2; i++){
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+          }
+          return text;
+        }
+
+        function easy() {
+          var text = "";
+          var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+          for(let i = 0; i < 2; i++){
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+          }
+          return text;
+        }
+
+        let obstacle1 = easy()
+        let obstacle2 = easy()
+        let obstacle3 = medium()
+        let obstacle4 = medium()
+        let obstacle5 = hard()
+        let obstacle6 = hard()
+        let obstacle7 = hard()
+
+        this.track[2] = obstacle1
+        this.track[9] = obstacle2
+        this.track[15] = obstacle3
+        this.track[20] = obstacle4
+        this.track[24] = obstacle5
+        this.track[28] = obstacle6
+        this.track[29] = obstacle7
     }
   },
   mounted (){
+    this.generateObstacle()
+
     let self = this
     this.userid = localStorage.getItem('userid')
 
