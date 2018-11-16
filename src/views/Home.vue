@@ -2,9 +2,6 @@
   <div class="home container">
     <!--<HelloWorld msg="Welcome to Your Vue.js App"/>-->
     <div class="row">
-      <div class="col-2">
-
-      </div>
       <div class="col-8 border">
         <h3>MIKE RACER</h3>
         Insert Room Name :
@@ -12,7 +9,9 @@
         <button @click="setRoom">Join Room</button>
         <br>
         Room With Player :
-        <list :roomList="roomList" v-on:sender= "joinRoom($event)"/>
+        <div class="row">
+          <list :roomList="roomList" v-on:sender= "joinRoom($event)"/>
+        </div>
         <img class="footer" src="http://showgirlequestrian.com.au/wp-content/uploads/2016/02/Horses-Running.png">
       </div>
       <div class="col-2">

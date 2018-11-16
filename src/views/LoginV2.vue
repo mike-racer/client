@@ -1,11 +1,23 @@
 <template>
-  <div class="about">
-    <h1 class="welcome">Welcome to room {{room}} </h1>
+  <div class="container mt-1">
+
+    <div class="row d-flex justify-content-center">
+      <h1 class="display-2 col-lg-12 col-md-12 col-sm-12"><i class="fas fa-person-booth"></i><strong> {{room}}</strong></h1>
+      <img src="http://i.imgur.com/CnPFg9W.jpg" class="rounded mb-5" style="max-height:400px">
+      <div class="row">
+      
+      </div>
+      <h3 class="display-4 col-lg-12 col-md-12 col-sm-12">Who Are You?</h3>
+    </div>
+    <p class="note"> {{notif}} </p>
     <div class="col-md-12">
       <input type="text" v-model="username" placeholder="Player name">
-      <button @click="login">Login</button>
+      <div class="row">
+        
+      </div>
+      <button @click="login" class="btn btn-danger">ENTER RACE</button>
       <br><br>
-      <p class="note"> {{notif}} </p>
+      
     </div>
   </div>
 </template>

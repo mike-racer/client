@@ -1,21 +1,17 @@
 <template>
-  <div class="container">
-    <div class="row mt-5 d-flex justify-content-center">
-      <h1 class="display-1 col-sm-12 col-md-12 col-lg-12">MIKE RACER</h1>
-      <img class="col-sm-12 col-md-12 col-lg-12" src="http://showgirlequestrian.com.au/wp-content/uploads/2016/02/Horses-Running.png">
-      <div class="col-sm-12 col-md-12 col-lg-12 mt-3">
-        <div class="row d-flex justify-content-center">
-          <h5 class="h5 col-sm-12 col-md-12 col-lg-12"><strong>ROOM LIST : </strong></h5>
-          <div @click="selectRoom(single)" class="col-sm-4 col-md-3 col-lg-2 border btn dusty-grass-gradient text-dark" v-for="(single, index) in roomlist" :key="index" style="cursor:pointer">
-            <h5 class="h5">{{single}}</h5>
-          </div>
-        </div>
-        <h4 class="mt-2">Selected Room : {{room}}</h4>
-        <input type="text" class="form-control mt-3" placeholder="CREATE ROOM" v-model="room"><br>
-        <button class="btn btn-success" @click="setRoom">Enter Room</button>
+  <div class="home">
+    <div class="d-flex justify-content-center align-items-center mb-4 col-9 m-auto p-3 rounded" id="divroom">
+      <div class="mr-5 d-flex align-items-center">
+        <div class="lead mr-5">Playing Rooms</div> 
+        <i class="fas fa-arrow-circle-right"></i></div>
+      <div class="ml- mr-5" id="listroom" v-if="roomlist.length > 0">
+        <div id="oneroom" v-for="(single, index) in roomlist" :key="index"> {{single}} </div>
       </div>
+      <div class="col-6">
+      <input type="text" class="form-control" placeholder="Room" v-model="room"><br>
+      <button class="btn btn-outline-dark" id="btn-room" @click="setRoom">Enter Room</button>
     </div>
-    <br>
+    </div>
   </div>
 </template>
 
@@ -47,16 +43,17 @@ export default {
               .then(response => {
                 console.log(response)
                 localStorage.setItem('room', self.room)
-                self.$router.push('loginv2')
+                self.$router.push('login')
               })
           } else {
             let roomusers = result.users
             if (roomusers && Object.keys(roomusers).length >= 2) {
               localStorage.removeItem('room')
               alert('Full Room. Please choose another!')
+              window.location.reload()
             } else {
               localStorage.setItem('room', self.room)
-              self.$router.push('loginv2')
+              self.$router.push('login')
             }
           }
         })
@@ -64,14 +61,11 @@ export default {
     },
     getAllRoom () {
       let self = this
-      database.ref('room/').on('value', function (snapshot) {
+      database.ref('room/').once('value', function (snapshot) {
         console.log('get all room', snapshot.val())
         let result = snapshot.val()
         self.roomlist = Object.keys(result)
       })
-    },
-    selectRoom(roomName){
-      this.room = roomName
     }
   },
   created () {
